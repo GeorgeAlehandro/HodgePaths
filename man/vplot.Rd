@@ -4,7 +4,7 @@
 \alias{vplot}
 \title{Plot vector field}
 \usage{
-vplot(df, seg, normalize = FALSE)
+vplot(df, seg, normalize = FALSE, fx = mean)
 }
 \arguments{
 \item{df}{dataframe with $x $y $dx, $dy being a vector field}

@@ -19,12 +19,13 @@ makedf <- function(out) {
 #' @param df dataframe with $x $y $dx, $dy being a vector field
 #' @param seg #into how many segments do you want to average out a vector field
 #' @param normalize TRUE or FALSE if you wish to normalize vectors when they are displayed
+#' @param fc function for averiging vectors in cell ("mean"/"median")
 #'
 #' @return
 #' @export
 #'
-#' @examples
-vplot <- function(df,seg,normalize=FALSE) {
+#' @examples vplot(df2,30, T, "mean")
+vplot <- function(df,seg,normalize=FALSE,fc="mean") {
   library(ggplot2)
   library(plyr)
   minimum<-min(df$x)
@@ -34,9 +35,15 @@ vplot <- function(df,seg,normalize=FALSE) {
   df$cutX <- cut(df$x, breaks = seq(minimum-1,maximum+1,spacing))
   df$cutY <- cut(df$y, breaks = seq(min(df$y)-1,max(df$y)+1,spacing))
 
+  if (fc=="mean") {
+  mergedy <- ddply(df, .(cutX,cutY), summarize, mean=mean(dy))
+  mVal = ddply(df, .(cutX, cutY), summarize, mean = mean(dx)) }
+  if (fc=="median") {
+    mergedy <- ddply(df, .(cutX,cutY), summarize, mean=median(dy))
+    mVal = ddply(df, .(cutX, cutY), summarize, mean = median(dx)) }
 
 
-  mVal = ddply(df, .(cutX, cutY), summarize, mean = mean(dx))
+
   mVal$cutX = as.character(mVal$cutX)
   mVal$cutX = unlist(strsplit(mVal$cutX, ","))[c(T,F)]
   mVal$cutX = as.numeric(sub("\\(", "", mVal$cutX))+spacing/2
@@ -46,7 +53,7 @@ vplot <- function(df,seg,normalize=FALSE) {
   #coordinates(mVal) = ~cutX +cutY
   #gridded(mVal) = TRUE
   #mergedx <- plyr::ddply(df, .(cutX,cutY), summarize, mean=mean(dx))
-  mergedy <- ddply(df, .(cutX,cutY), summarize, mean=mean(dy))
+
 
   final=data.frame(x=mVal$cutX,y=mVal$cutY, dx=mVal$mean,dy=mergedy$mean)
   final$vel=final$dx^2+final$dy^2

@@ -5,8 +5,8 @@
 \alias{HodgePaths}
 \title{HodgePaths}
 \description{
-Does Hodge decomposition of vector field associated with point cloud
+Does Hodge decomposition of descrete vector field associated with point cloud in n-dimensional space
 }
 \author{
-Jan Stuchly
+Jan Stuchly & Tomas Jelinek
 }
