@@ -5,7 +5,8 @@ projPV<-function(p,v,v0) {
 }
 
 
-gradientphi<-function(A,B,C){
+gradientphi<-function(A,B,C, normalize=FALSE){
+
   g1<-A-projPV(A,B,C)
   g1<-g1/as.numeric(t(g1)%*%g1)
   g2<-B-projPV(B,A,C)
@@ -13,6 +14,7 @@ gradientphi<-function(A,B,C){
   g3<-C-projPV(C,A,B)
   g3<-g3/as.numeric(t(g3)%*%g3)
   cbind(g1,g2,g3)
+
 }
 
 #' Title
