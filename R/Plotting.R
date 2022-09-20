@@ -62,7 +62,7 @@ vplot <- function(df,seg,normalize=FALSE,fc="mean") {
     final$dy <- (final$dy/sqrt(final$vel))*spacing
   }
 
-  ggplot(final, aes(x = x, y = y))+scale_colour_continuous(low = "grey80", high = "darkred")+geom_raster(aes(fill=vel))+geom_segment(aes(xend = x + dx, yend = y + dy),size = 0.3, arrow = arrow(length = unit(0.2, "cm")))
+  ggplot(final, aes(x = x, y = y))+scale_fill_gradientn(colours=c("darkblue","darkgreen","yellow"))+geom_raster(aes(fill=vel))+geom_segment(aes(xend = x + dx, yend = y + dy),size = 0.3, arrow = arrow(length = unit(0.2, "cm")))
 
   #ggplot(final, aes(x=x,y=y)) +geom_raster(aes(fill=vel))+ metR::geom_streamline(data = final, aes(dx = dx, dy = dy),L = 1.75, res = 1, n = 60, jitter =150)
 
