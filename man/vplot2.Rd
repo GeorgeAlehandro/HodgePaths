@@ -4,7 +4,7 @@
 \alias{vplot2}
 \title{Title}
 \usage{
-vplot2(df, seg, normalize = FALSE, fc = "mean", jitter = 130, n = 70)
+vplot2(df, seg, normalize = FALSE, fc = "mean", jitter = 130, n = 70, mask = F)
 }
 \arguments{
 \item{df}{dataframe with $x $y $dx, $dy being a vector field}
@@ -18,6 +18,8 @@ vplot2(df, seg, normalize = FALSE, fc = "mean", jitter = 130, n = 70)
 \item{jitter}{amount of jitter}
 
 \item{n}{amount of lines}
+
+\item{mask}{Draws vector field over it (T or F)}
 }
 \description{
 Title

@@ -78,12 +78,13 @@ vplot <- function(df,seg,normalize=FALSE,fc="mean") {
 #' @param fc function for averiging vectors in cell ("mean"/"median")
 #' @param jitter amount of jitter
 #' @param n amount of lines
+#' @param mask Draws vector field over it (T or F)
 #'
 #' @return
 #' @export
 #'
 #' @examples
-vplot2 <- function(df,seg,normalize=FALSE,fc="mean",jitter=130,n=70) {
+vplot2 <- function(df,seg,normalize=FALSE,fc="mean",jitter=130,n=70,mask=F) {
   minimum<-min(df$x)
   maximum<-max(df$x)
   spacing <- (maximum-minimum)/(seg-1)
@@ -122,7 +123,12 @@ vplot2 <- function(df,seg,normalize=FALSE,fc="mean",jitter=130,n=70) {
 
   plot1<-ggplot(vysledek, aes(x=x,y=y))+scale_fill_gradientn(colours=c("darkblue","darkgreen","yellow"))+geom_raster(aes(fill=vel))+ metR::geom_streamline(data = vysledek, aes(dx = dx, dy = dy,color = vel),L = 5, res = 1.5, n =n, jitter =jitter,arrow = arrow(length = unit(0.15, "cm")))
 
-  plot2<-ggplot(vysledek, aes(x=x, y=y)) +metR::geom_streamline(aes(dx = dx, dy = dy, alpha = ..step..,color = sqrt(..dx..^2 + ..dy..^2)),n=n,L = 5,jitter=jitter, res = 1.5, arrow=NULL,lineend = "round") +scale_size(range = c(0.2, 1.2))+theme_bw()
+  if (mask==T) {
+  plot2<-ggplot(vysledek, aes(x=x, y=y)) +metR::geom_streamline(aes(dx = dx, dy = dy, alpha = ..step..,color = sqrt(..dx..^2 + ..dy..^2)),n=n,L = 5,jitter=jitter, res = 1.5, arrow=NULL,lineend = "round") +scale_size(range = c(0.2, 1.2))+theme_bw()+geom_segment(data=final, aes(xend = x + dx, yend = y + dy),size = 0.1, arrow = arrow(length = unit(0.2, "cm"),ends="first", type = "open"))
+  }
+  if (mask==F) {
+    plot2<-ggplot(vysledek, aes(x=x, y=y)) +metR::geom_streamline(aes(dx = dx, dy = dy, alpha = ..step..,color = sqrt(..dx..^2 + ..dy..^2)),n=n,L = 5,jitter=jitter, res = 1.5, arrow=NULL,lineend = "round") +scale_size(range = c(0.2, 1.2))+theme_bw()
+  }
   grid.arrange(plot1, plot2, ncol=2)
 
 }
