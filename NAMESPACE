@@ -2,10 +2,12 @@
 
 export(HodgeDecomp)
 export(WhitneyMap1f_BC)
+export(build_boundary_CuR)
 export(complex_to_boundaryF)
 export(deRahmMap1f)
 export(makedf)
 export(vplot)
+export(vplot2)
 import(Rcpp)
 import(RcppEigen)
 importFrom(Rcpp,evalCpp)
