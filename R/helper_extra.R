@@ -95,7 +95,7 @@ calculate_Lap_sym <- function(B, D0, D1) {
 #' @export
 #'
 #' @examples
-calculate_alpha <- function(Lap, adjoint_matrix, VD, IndexOfOriginCell) {
+calculate_alpha <- function(Lap, D0, adjoint_matrix, VD, IndexOfOriginCell) {
   Dm_minus <- Matrix::Diagonal(x=diag(D0)^(-1/2))
   Dm_minus_inverse <- Matrix::Diagonal(x=diag(Dm_minus)^(-1))
   left_hand <- Lap[-IndexOfOriginCell,-IndexOfOriginCell]
@@ -140,7 +140,7 @@ calculate_alpha_no_root_selected <- function(Lap, adjoint_matrix, D0, VD) {
 #' @export
 #'
 #' @examples
-get_pseudotime_from_velocity <- function(tv1, nearest_neighbour_number=30, IndexOfRootCell=NULL, MatrixOfVelocity = velocity) {
+get_pseudotime_from_velocity <- function(tv1, nearest_neighbour_number=30, IndexOfRootCell=NULL, MatrixOfVelocity = velocity, X=NULL) {
   # create graph and extract edges from transition matrix
   graph <- create_graph_from_transition_matrix(tv1, nearest_neighbour_number)
   transition_matrix <- graph[[1]]
@@ -152,7 +152,7 @@ get_pseudotime_from_velocity <- function(tv1, nearest_neighbour_number=30, Index
 
   # load data
   V <- as.matrix(MatrixOfVelocity)
-  X<-tv1$data
+  if (is.null(X)) X<-tv1$data
   VD<-deRahmMap1f(B = B,X = X,V = V)
   D0<-Matrix::Diagonal(x=rowSums(transition_matrix)^-1)
   D1<-Matrix::Diagonal(x=E(G)$weight)
@@ -165,7 +165,7 @@ get_pseudotime_from_velocity <- function(tv1, nearest_neighbour_number=30, Index
     return(alpha)
   }
   else{
-    alpha_without_origin <- calculate_alpha(Lap, adjoint_matrix, VD, IndexOfRootCell)
+    alpha_without_origin <- calculate_alpha(Lap, D0, adjoint_matrix, VD, IndexOfRootCell)
     alpha <-rep(0,nrow(tv1$data))
     alpha[-IndexOfRootCell]<-as.numeric(alpha_without_origin)
     return(alpha)
